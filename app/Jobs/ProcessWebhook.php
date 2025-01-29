@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use Spatie\WebhookClient\Jobs\ProcessWebhookJob;
+use Illuminate\Support\Facades\Log;
+
+class ProcessWebhook extends ProcessWebhookJob implements ShouldQueue
+{
+    use Queueable;
+
+    /**
+     * Create a new job instance.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
+    {
+        $dat = json_decode($this->webhookCall, true);
+        $data = $dat['payload'];
+    
+        if ($data['event'] == 'charge.success') {
+          // take action since the charge was success
+          // Create order
+          // Sed email
+          // Whatever you want
+          Log::info($data);
+        }
+
+        //Acknowledge you received the response
+        http_response_code(200);
+    }
+}
