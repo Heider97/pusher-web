@@ -1,7 +1,6 @@
 <?php
 
-use App\Events\ConfigAppChanged;
-use App\Events\MessageEvent;
+use Illuminate\Support\Facades\DB;
 use App\Models\Post;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -37,4 +36,9 @@ Route::middleware([
 
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    Route::get('/jobs', function () {
+        $jobs = DB::table('jobs')->orderBy('id', 'desc')->get();
+        return view('jobs.index', compact('jobs'));
+    });
 });
