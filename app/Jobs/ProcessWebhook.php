@@ -34,6 +34,9 @@ class ProcessWebhook extends ProcessWebhookJob implements ShouldQueue
         Log::info('Webhook received');
 
         foreach($data['events'] as $event) {
+
+            Log::info(json_encode($event));
+
             if($event == 'member_added') {
                 $channel = $channelService->createChannel($event['channel']);
                 $channelService->subscribeUserToChannel($event['user_id'], $channel->id);
