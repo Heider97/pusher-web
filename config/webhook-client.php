@@ -20,7 +20,7 @@ return [
             /*
              * The name of the header containing the signature.
              */
-            'signature_header_name' => 'Signature',
+            'signature_header_name' => '65a75e20824deceb4fe6',
 
             /*
              *  This class will verify that the content of the signature header is valid.
