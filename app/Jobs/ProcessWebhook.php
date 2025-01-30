@@ -5,6 +5,7 @@ namespace App\Jobs;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Spatie\WebhookClient\Jobs\ProcessWebhookJob;
+use Spatie\WebhookClient\Models\WebhookCall;
 use Illuminate\Support\Facades\Log;
 use App\Models\Post;
 
@@ -15,9 +16,9 @@ class ProcessWebhook extends ProcessWebhookJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct(WebhookCall $webhookCall)
     {
-        //
+        parent::__construct($webhookCall);
     }
 
     /**
