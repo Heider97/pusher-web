@@ -13,20 +13,11 @@ class PusherSignatureValidator implements SignatureValidator
     {
         $signature = $request->header($webhookConfig->signatureHeaderName);
 
-        Log::info($webhookConfig->signatureHeaderName);
-
-        $body = $request->getContent();
-
-        Log::info(json_encode($body));
+        $content = $request->getContent();
+        $body = trim($content);
 
         $secret = env('WEBHOOK_CLIENT_SECRET');
-
-        Log::info($secret);
-
         $hash = hash_hmac('sha256', $body, $secret);
-
-        Log::info($signature);
-        Log::info($hash);
 
         if ($signature !== $hash) {
             Log::error('Invalid signature');
