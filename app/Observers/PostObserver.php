@@ -12,7 +12,7 @@ class PostObserver
      */
     public function created(Post $post): void
     {
-        event(new PostEvent($post, 1));
+        event(new PostEvent($post, 'created'));
     }
 
     /**
@@ -20,7 +20,7 @@ class PostObserver
      */
     public function updated(Post $post): void
     {
-        event(new PostEvent($post, 1));
+        event(new PostEvent($post, 'updated'));
     }
 
     /**
@@ -28,7 +28,7 @@ class PostObserver
      */
     public function deleted(Post $post): void
     {
-        event(new PostEvent($post, 1));
+        event(new PostEvent($post, 'deleted'));
     }
 
     /**
@@ -36,7 +36,7 @@ class PostObserver
      */
     public function restored(Post $post): void
     {
-        event(new PostEvent($post, 1));
+        event(new PostEvent($post, 'restored'));
     }
 
     /**
@@ -44,6 +44,6 @@ class PostObserver
      */
     public function forceDeleted(Post $post): void
     {
-        //
+        event(new PostEvent($post, 'forceDeleted'));
     }
 }
