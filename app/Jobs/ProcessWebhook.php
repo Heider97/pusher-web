@@ -7,6 +7,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Spatie\WebhookClient\Jobs\ProcessWebhookJob;
 use Spatie\WebhookClient\Models\WebhookCall;
 use App\Services\ChannelService;
+use Illuminate\Support\Facades\Log;
 
 class ProcessWebhook extends ProcessWebhookJob implements ShouldQueue
 {
@@ -29,6 +30,8 @@ class ProcessWebhook extends ProcessWebhookJob implements ShouldQueue
 
         $dat = json_decode($this->webhookCall, true);
         $data = $dat['payload'];
+
+        Log::info('Webhook received');
 
         foreach($data['events'] as $event) {
             if($event == 'member_added') {
