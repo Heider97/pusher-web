@@ -23,22 +23,27 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        //broadcast(new MessageEvent('hola a todos'))->toOthers();
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::get('/posts', function () {
         $post = new Post(
             [
-                'title' => 'Post 1',
-                'content' => 'Content 1',
-                'user_id' => 1
+                'title' => 'My first post',
+                'content' => 'This is my first post content',
+                'user_id' => auth()->id(),
             ]
         );
 
         $post->save();
 
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+        return Inertia::render('Post/Index', [
+            'posts' => Post::orderBy('id', 'desc')->get(),
+        ]);
+    })->name('posts');
 
     Route::get('/jobs', function () {
         $jobs = DB::table('jobs')->orderBy('id', 'desc')->get();
-        return view('jobs.index', compact('jobs'));
-    });
+        return Inertia::render('Jobs/Index', ['jobs' => $jobs]);
+    })->name('jobs');
 });

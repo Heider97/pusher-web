@@ -1,5 +1,6 @@
 <?php
 
+use App\Validator\PusherSignatureValidator;
 use Illuminate\Support\Facades\App;
 
 return [
@@ -27,7 +28,8 @@ return [
              *
              * It should implement \Spatie\WebhookClient\SignatureValidator\SignatureValidator
              */
-            'signature_validator' => \Spatie\WebhookClient\SignatureValidator\DefaultSignatureValidator::class,
+            // 'signature_validator' => \Spatie\WebhookClient\SignatureValidator\DefaultSignatureValidator::class,
+            'signature_validator' => PusherSignatureValidator::class,
 
             /*
              * This class determines if the webhook call should be stored and processed.
