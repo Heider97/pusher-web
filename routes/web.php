@@ -35,6 +35,7 @@ Route::middleware([
     })->name('jobs');
 
     Route::get('/channels/active-users', [ChannelController::class, 'getChannelsWithActiveUsers']);
+    Route::post('/channels/{channelId}/send-message', [ChannelController::class, 'sendMessageToActiveUsers']);
 
     Route::get('/channels', function () {
         return Inertia::render('Channels/Index');

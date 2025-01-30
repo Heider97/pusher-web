@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Events\ChannelMessageSent;
 
 class User extends Authenticatable
 {
@@ -70,5 +71,25 @@ class User extends Authenticatable
         return $this->belongsToMany(Channel::class, 'channel_subscriptions')
             ->withPivot('status')
             ->withTimestamps();
+    }
+
+    public function updateStatus($status)
+    {
+        $this->pivot->update(['status' => $status]);
+
+        if ($status === 'active') {
+            $this->sendMissedMessages();
+        }
+    }
+
+
+    public function sendMissedMessages()
+    {
+        $missedMessages = MissedMessage::where('user_id', $this->id)->where('sent', false)->get();
+
+        foreach ($missedMessages as $message) {
+            broadcast(new ChannelMessageSent($message->message, $message->channel->name, $this));
+            $message->update(['sent' => true]);
+        }
     }
 }
