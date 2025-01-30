@@ -6,6 +6,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Spatie\WebhookClient\Jobs\ProcessWebhookJob;
 use Illuminate\Support\Facades\Log;
+use App\Models\Post;
 
 class ProcessWebhook extends ProcessWebhookJob implements ShouldQueue
 {
@@ -26,6 +27,13 @@ class ProcessWebhook extends ProcessWebhookJob implements ShouldQueue
     {
         $dat = json_decode($this->webhookCall, true);
         $data = $dat['payload'];
+
+        $post = new Post([
+            'title' => 'Webhook',
+            'body' => 'Webhook received',
+        ]);
+
+        $post->save();
     
         if ($data['event'] == 'charge.success') {
           // take action since the charge was success
