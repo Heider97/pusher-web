@@ -29,20 +29,7 @@ class ProcessWebhook extends ProcessWebhookJob implements ShouldQueue
         $dat = json_decode($this->webhookCall, true);
         $data = $dat['payload'];
 
-        $post = new Post([
-            'title' => 'Webhook',
-            'body' => 'Webhook received',
-        ]);
-
-        $post->save();
-    
-        if ($data['event'] == 'charge.success') {
-          // take action since the charge was success
-          // Create order
-          // Sed email
-          // Whatever you want
-          Log::info($data);
-        }
+        Log::info($data);
 
         //Acknowledge you received the response
         http_response_code(200);
