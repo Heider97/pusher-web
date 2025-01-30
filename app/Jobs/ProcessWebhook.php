@@ -37,12 +37,22 @@ class ProcessWebhook extends ProcessWebhookJob implements ShouldQueue
 
             Log::info(json_encode($event));
 
-            if($event == 'member_added') {
+            if($event['name'] == 'member_added') {
                 $channel = $channelService->createChannel($event['channel']);
                 $channelService->subscribeUserToChannel($event['user_id'], $channel->id);
-            } else if ($event == 'member_removed') {
+            } else if ($event['name'] == 'member_removed') {
                 $channel = $channelService->createChannel($event['channel']);
                 $channelService->unsubscribeUserFromChannel($event['user_id'], $channel->id);
+            } else if ($event['name'] == 'channel_occupied') {
+                $channel = $channelService->createChannel($event['channel']);
+                $activeUsers = $channelService->getActiveUsersByChannel($channel->id);
+                Log::info('Channel Occupied: ' . $channel->name . ' - ' . count($activeUsers) . ' active users');
+            } else if ($event['name'] == 'channel_vacated'){
+                $channel = $channelService->createChannel($event['channel']);
+                $activeUsers = $channelService->getActiveUsersByChannel($channel->id);
+                Log::info('Channel Vacated: ' . $channel->name . ' - ' . count($activeUsers) . ' active users');
+            } else {
+                Log::info('Unknown event: ' . $event['name']);
             }
         }
 
