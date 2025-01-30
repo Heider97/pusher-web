@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ChannelController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -32,4 +33,12 @@ Route::middleware([
         $jobs = DB::table('jobs')->orderBy('id', 'desc')->get();
         return Inertia::render('Jobs/Index', ['jobs' => $jobs]);
     })->name('jobs');
+
+    Route::get('/channels/active-users', [ChannelController::class, 'getChannelsWithActiveUsers']);
+
+    Route::get('/channels', function () {
+        return Inertia::render('Channels/Index');
+    })->name('channels');
 });
+
+
