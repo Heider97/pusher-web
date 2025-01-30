@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
-use App\Models\Post;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -26,21 +26,7 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/posts', function () {
-        $post = new Post(
-            [
-                'title' => 'My first post',
-                'content' => 'This is my first post content',
-                'user_id' => auth()->id(),
-            ]
-        );
-
-        $post->save();
-
-        return Inertia::render('Post/Index', [
-            'posts' => Post::orderBy('id', 'desc')->get(),
-        ]);
-    })->name('posts');
+    Route::resource('posts', PostController::class);
 
     Route::get('/jobs', function () {
         $jobs = DB::table('jobs')->orderBy('id', 'desc')->get();

@@ -15,16 +15,16 @@ class PostEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $post;
-    public $userId;
+    public Post $post;
+    public String $action;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Post $post, int $userId)
+    public function __construct(Post $post, String $action)
     {
         $this->post = $post;
-        $this->userId = $userId;
+        $this->action = $action;
     }
 
     /**
@@ -35,13 +35,14 @@ class PostEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('tms' . $this->userId),
+            new PrivateChannel('tms' . $this->post->user_id),
         ];
     }
 
     public function broadcastWith()
     {
         return [
+            'action' => $this->action,
             'post' => $this->post,
         ];
     }
